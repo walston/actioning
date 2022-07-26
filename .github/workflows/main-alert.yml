@@ -5,7 +5,7 @@ on:
       - main
 jobs:
   comment:
-    # if: startsWith(github.head_ref, 'rc')
+    if: startsWith(github.head_ref, 'rc') || startsWith(github.head_ref, 'RC')
     runs-on: ubuntu-latest
     steps:
       - name: "Comment about squash & merge"

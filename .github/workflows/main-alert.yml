@@ -1,10 +1,11 @@
-name: Don't Squash & Merge on `main`
+name: Should this PR use a merge commit?
 on:
   pull_request:
     branches:
       - main
 jobs:
   comment:
+    if: startsWith(github.head_ref, 'rc') || startsWith(github.head_ref, 'RC')
     runs-on: ubuntu-latest
     steps:
       - name: "Comment about squash & merge"
@@ -12,9 +13,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR: ${{ github.event.pull_request.html_url }}
         run: |
+          echo ${{ github.head_ref }} &
           gh pr comment $PR --body "
           # Merge commit
 
-          Do not **Squash and merge** into \`main\`, instead **create a merge commit**
+          Do not **squash and merge** release-candidate branches into \`main\`,\
+          instead **create a merge commit**.
 
           ![Use **merge commit**](https://i.imgur.com/9vRccR6.jpg)"
